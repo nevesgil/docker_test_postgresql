@@ -1,0 +1,32 @@
+version: "3"
+services:
+  pgadmin:
+    image: "dpage/pgadmin4"
+    ports:
+      - "80:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=gilmar2@gilmar2.com
+      - PGADMIN_DEFAULT_PASSWORD=gilmar2
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+  postgresql:
+    image: "postgres:12.4"
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: gilmar
+      POSTGRES_PASSWORD: gilmar
+      POSTGRES_DB: test
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - db-data:/var/lib/postgresql/data
+  jupyter:
+    build: ./jupyter
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./jupyter:/app
+    entrypoint: jupyter lab --ip='0.0.0.0' --port=8888 --no-browser --allow-root
+volumes:
+  db-data:
+  pgadmin-data:
